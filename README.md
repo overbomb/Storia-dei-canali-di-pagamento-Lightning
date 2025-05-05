@@ -55,9 +55,11 @@ Ora, se hai notato, ho chiamato questo tipo di canale di pagamento "rotto". Ques
 
 **Lezioni apprese?**
 
-- Gli orsi sono cattive notizie.
+- Gli orsi portano cattive notizie.
 
-- Non puoi ragionevolmente invocare "la Visione di Satoshi" e allo stesso tempo rifiutare il Lightning Network perché non è on-chain. La Visione di Satoshi includeva un'implementazione malfatta dei canali di pagamento con nSequence, dove la transazione on-chain rappresentava più pagamenti logici, esattamente ciò che fanno le moderne tecniche off-chain (eccetto le moderne tecniche off-chain funzionano davvero). nSequence (il campo, ma non il suo significato moderno) è presente in Bitcoin fin dalla versione BitCoin For Windows Alpha 0.1.0. E la sua intenzione originale erano i canali di pagamento. Non puoi avvicinarti di più alla Visione di Satoshi di un campo che Satoshi ha personalmente aggiunto alle transazioni nella prima versione pubblica del software BitCoin, davvero.
+- Non puoi ragionevolmente invocare "la Visione di Satoshi" e allo stesso tempo rifiutare il Lightning Network perché non è on-chain. La Visione di Satoshi includeva un'implementazione malfatta dei canali di pagamento con nSequence, dove la   transazione on-chain rappresentava più pagamenti logici, esattamente ciò che fanno le moderne tecniche off-chain (eccetto le moderne tecniche off-chain funzionano davvero). nSequence (il campo, ma non il suo significato moderno) è       
+  presente in Bitcoin fin dalla versione BitCoin For Windows Alpha 0.1.0. E la sua intenzione originale erano i canali di pagamento. Non puoi avvicinarti di più alla Visione di Satoshi di un campo che Satoshi ha personalmente aggiunto alle 
+  transazioni nella prima versione pubblica del software BitCoin, davvero.
 
 - I miner possono totalmente bypassare le regole del mempool. Infatti, il motivo per cui nSequence è stato riproposto per indicare la "sostituzione opzionale tramite commissione" è perché i miner sono già incentivati dal sistema nSequence a   seguire sempre la sostituzione tramite commissione. Voglio dire, cosa pensi che siano quelle bevande che hai passato a Jihan Wu, se non la commissione che gli paghi per minare una versione specifica della tua transazione?
 
@@ -76,56 +78,68 @@ Fortunatamente, Jeremy Spilman ha proposto un modo migliore che non ti permetter
 Per prima cosa, tu e il barista eseguite questo rituale:
 
 
-1. Crea una transazione: Ottieni dei fondi e crea una transazione che paga a un multisig 2-di-2 tra te e il barista. Non la trasmetti ancora: la firmi e ottieni il suo txid.
-2. Crea una transazione di "ritiro": Crea un'altra transazione che spende la transazione precedente. Questa transazione (il “ritiro”) ha un nLockTime uguale all'orario di chiusura del bar, più un blocco. La firmi e dai questa transazione di "ritiro" (ma non la transazione precedente) al barista.
-3. Il barista firma il "ritiro": Il barista firma il "ritiro" e te lo restituisce. Ora è valida poiché spende un 2-di-2 tra te e il barista, e entrambi avete firmato la transazione di "ritiro".
-4. Trasmetti la prima transazione: Ora trasmetti la prima transazione on-chain. Tu e il barista aspettate che venga confermata profondamente, poi potete iniziare a ordinare.
+1. Ottieni dei fondi e crea una transazione che paga a un multisig 2-di-2 tra te e il barista. Non la trasmetti ancora: la firmi e ottieni il suo txid.
+   
+3. Crea un'altra transazione che spende la transazione precedente. Questa transazione (di “rimborso”) ha un nLockTime uguale all'orario di chiusura del bar, più un blocco. La firmi e dai questa transazione di "rimborso" (ma non la transazione precedente) al barista.
+   
+5. Il barista firma il "rimborso" e te lo restituisce. Ora è valida poiché spende un 2-di-2 tra te e il barista, e entrambi avete firmato la transazione di "rimborso".
+  
+7. Ora trasmetti la prima transazione on-chain. Tu e il barista aspettate che venga confermata profondamente, poi potete iniziare a ordinare.
 
 
 Quello sopra è probabilmente vagamente familiare agli utenti del Lightning Network. È il processo di finanziamento dei canali di pagamento! La prima transazione, quella che paga a un multisig 2-di-2, è la transazione di finanziamento che sostiene i fondi del canale di pagamento.
 
 Quindi ora inizi a ordinare in questo modo:
 
-1 Crea la transazione per il primo drink: Per il tuo primo drink, crei una transazione che spende l'output della transazione di finanziamento e invia il prezzo del drink al barista, restituendo il resto a te.
-2 Il barista serve il primo drink: Firmi la transazione e la passi al barista, che ti serve il tuo primo drink.
-3 Crea transazioni per i drink successivi: Per i drink successivi, ricrei la stessa transazione, aggiungendo il prezzo del nuovo drink alla somma che va al barista e riducendo la somma restituita a te. Firmi la transazione e la dai al barista, che ti serve il tuo drink successivo.
-4 Infine:
- - Se si raggiunge l'orario di chiusura del bar, il barista firma l'ultima transazione, completando le necessarie 2 di 2 firme e trasmettendo questa al network di Bitcoin. Poiché la transazione di "ritiro" è l'orario di chiusura + 1, non può essere utilizzata all'orario di chiusura.
- - Se decidi di voler andare via presto perché il tuo fegato sta piangendo, puoi semplicemente dire al barista di procedere e chiudere il canale (cosa che il barista può fare in qualsiasi momento semplicemente firmando e trasmettendo l'ultima transazione: il barista non lo farà perché spera che tu rimanga e beva di più).
- - Se alla fine sei rimasto semplicemente al bar senza mai ordinare, allora all'orario di chiusura + 1 trasmetti la transazione di "ritiro" e recuperi i tuoi fondi per intero.
+1. Per il tuo primo drink, crei una transazione che spende l'output della transazione di finanziamento e invia il prezzo del drink al barista, restituendo il resto a te.
+
+2. Firmi la transazione e la passi al barista, che ti serve il tuo primo drink.
+
+3. Per i drink successivi, ricrei la stessa transazione, aggiungendo il prezzo del nuovo drink alla somma che va al barista e riducendo la somma restituita a te. Firmi la transazione e la dai al barista, che ti serve il tuo drink successivo.
+   
+4. Infine:
+   
+  - Se si raggiunge l'orario di chiusura del bar, il barista firma l'ultima transazione, completando le necessarie 2 di 2 firme e trasmettendo questa al network di Bitcoin. Poiché la transazione di "rimborso" è l'orario di chiusura + 1, non     può essere utilizzata all'orario di chiusura.
+    
+ - Se decidi di voler andare via presto perché il tuo fegato sta piangendo, puoi semplicemente dire al barista di procedere e chiudere il canale (cosa che il barista può fare in qualsiasi momento semplicemente firmando e trasmettendo 
+   l'ultima transazione: il barista non lo farà perché spera che tu rimanga e beva di più).
+   
+ - Se alla fine sei rimasto semplicemente al bar senza mai ordinare, allora all'orario di chiusura + 1 trasmetti la transazione di "rimborso" e recuperi i tuoi fondi per intero.
 
 Ora, anche se passi 50 drink a Jihan Wu, non puoi dargli la prima transazione (quella che paga solo per un drink) e chiedergli di minarla: sta spendendo un 2-di-2 e la copia che hai contiene solo la tua firma. Hai bisogno della firma del barista per renderla valida, ma lui o lei non collaborerà mai in qualcosa che gli farebbe perdere denaro, quindi una firma del barista che convalida uno stato precedente in cui lui o lei viene pagato di meno non accadrà.
 
-Quindi, problema risolto, giusto? Giusto? Ok, proviamo. Quindi ottieni i tuoi fondi, li metti in una transazione di finanziamento, ottieni la transazione di "ritiro", confermi la transazione di finanziamento...
+Quindi, problema risolto, giusto? Giusto? Ok, proviamo. Quindi ottieni i tuoi fondi, li metti in una transazione di finanziamento, ottieni la transazione di "rimborso", confermi la transazione di finanziamento...
 
 Una volta che la transazione di finanziamento viene confermata profondamente, il barista ride fragorosamente. Lui o lei chiama i buttafuori, che ti circondano minacciosamente.
 
 “Ti rifiuto il servizio,” dice il barista.
 
-“Va bene,” dici. “Stavo per andarmene comunque;” Sorridi. “Recupererò i miei soldi con la transazione di "ritiro" e scrivendo di quanto sia scadente il tuo servizio su Reddit, così ricevi karma negativo, quindi ecco!”
+“Va bene,” dici. “Stavo per andarmene comunque;” Sorridi. “Recupererò i miei soldi con la transazione di "rimborso" e scrivendo di quanto sia scadente il tuo servizio su Reddit, così ricevi karma negativo, quindi ecco!”
 
-“Non così in fretta,” dice il barista. La sua voce ti fa gelare le ossa. Sembra che il tuo sfruttamento del canale di pagamento nSequence di Satoshi sia ancora fresco nella sua mente. “Guarda il txid della transazione di finanziamento che è stata confermata.”
+“Non così in fretta,” dice il barista. La sua voce ti fa gelare le ossa. Sembra che il tuo sfruttamento del canale di pagamento nSequence di Satoshi sia ancora fresco nella sua mente. “Guarda il txid della transazione di finanziamento che è  stata confermata.”
 
 “E che c'è di strano?” chiedi con nonchalance, mentre apri il tuo computer desktop e accedi a un esploratore blockchain affidabile.
 
-Quello che vedi ti shocka.
+Quello che vedi ti shocca.
 
-“Cosa diavolo — il txid è diverso! Tu— hai cambiato la mia firma?? Ma come? Ho messo l'unica copia della mia chiave privata in una busta sigillata in una cassetta di ferro dentro a una cassaforte sepolta nel deserto del Gobi, protetta da un clan di nomadi che hanno dedicato le loro vite e quelle dei loro figli a mantenere la mia chiave privata al sicuro in perpetuo!”
+“Cosa diavolo?! il txid è diverso! Tu hai cambiato la mia firma?? Ma come? Ho messo l'unica copia della mia chiave privata in una busta sigillata in una cassetta di ferro dentro a una cassaforte sepolta nel deserto del Gobi, protetta da un clan di nomadi che hanno dedicato le loro vite e quelle dei loro figli a mantenere la mia chiave privata al sicuro in perpetuo!”
 
-“Non lo sapevi?” chiede il barista. “I componenti della firma sono solo numeri molto grandi. Il segno di uno dei componenti della firma può essere cambiato, da positivo a negativo, o da negativo a positivo, e la firma rimarrà valida. Chiunque può farlo, anche se non conosce la chiave privata. Ma poiché Bitcoin include le firme nella transazione quando genera il txid, questo piccolo cambiamento cambia anche il txid.” Lui o lei ride. “Dicono che lo sistemeranno separando le firme dal corpo della transazione. Dicono che questi tipi di malleabilità delle firme non influenzeranno più gli ID delle transazioni dopo aver fatto questo, ma scommetto che posso convincere il mio buon amico Jihan Wu a ritardare questo piano ‘SepSig’ per un bel po’. Un tipo amichevole, questo Jihan Wu, si scopre che tutto quello che dovevo fare era offrirgli 51 drink e lui era disposto a minare una transazione con i segni delle firme invertiti.” Il suo sorriso si allarga. “Temo che la tua transazione di "ritiro" non funzionerà più, poiché spende un txid che non esiste e non sarà mai confermato. Quindi ecco l'affare. Mi paghi il 99% dei fondi nella transazione di finanziamento, in cambio della mia firma sulla transazione che spende con il txid che vedi on-chain. Rifiuta, e perdi il 100% dei fondi e ogni altro HODLer, me compreso, beneficerà della riduzione dell'offerta di monete. Accetta, e ti terrai l'1%. Non perdo nulla se rifiuti, quindi non mi importerà se lo fai, ma considera la differenza tra ottenere nulla e ottenere l'1% dei tuoi fondi.” I suoi occhi brillano. “GENUFLETTI SUBITO.”
+“Non lo sapevi?” chiede il barista. “I componenti della firma sono solo numeri molto grandi. Il segno di uno dei componenti della firma può essere cambiato, da positivo a negativo, o da negativo a positivo, e la firma rimarrà valida. Chiunque può farlo, anche se non conosce la chiave privata. Ma poiché Bitcoin include le firme nella transazione quando genera il txid, questo piccolo cambiamento cambia anche il txid.” Lui o lei ride. “Dicono che lo sistemeranno separando le firme dal corpo della transazione. Dicono che questi tipi di malleabilità delle firme non influenzeranno più gli ID delle transazioni dopo aver fatto questo, ma scommetto che posso convincere il mio buon amico Jihan Wu a ritardare questo piano ‘SepSig’ per un bel po’. Un tipo amichevole, questo Jihan Wu, si scopre che tutto quello che dovevo fare era offrirgli 51 drink e lui era disposto a minare una transazione con i segni delle firme invertiti.” Il suo sorriso si allarga. “Temo che la tua transazione di "rimborso" non funzionerà più, poiché spende un txid che non esiste e non sarà mai confermato. Quindi ecco l'affare. Mi paghi il 99% dei fondi nella transazione di finanziamento, in cambio della mia firma sulla transazione che spende con il txid che vedi on-chain. Rifiuta, e perdi il 100% dei fondi e ogni altro HODLer, me compreso, beneficerà della riduzione dell'offerta di monete. Accetta, e ti terrai l'1%. Non perdo nulla se rifiuti, quindi non mi importerà se lo fai, ma considera la differenza tra ottenere nulla e ottenere l'1% dei tuoi fondi.” I suoi occhi brillano. “GENUFLETTI SUBITO.”
  
 LEZIONE APPRESA?
 
  - La vendetta è una brutta bestia.
- - La malleabilità delle transazioni è una bestia ancora più brutta. È per questo che abbiamo dovuto correggere il bug in SegWit. Certo, MtGox sosteneva di essere stata attaccata in questo modo perché qualcuno continuava a interferire con le loro firme di transazione e così hanno perso traccia di dove fossero finiti i loro fondi, ma in realtà, il motivo principale per correggere la malleabilità delle transazioni era supportare i canali di pagamento.
- - Sì, includere le firme nell'hash che definisce infine il txid è stato un errore. Satoshi ne ha fatti molti di questi. Quindi stiamo solo ribadendo la lezione "Satoshi non era un essere infinito di saggezza infinita" qui. Satoshi ha solo un lasciapassare per quanto sia fantastico Bitcoin.
+ - La malleabilità delle transazioni è una bestia ancora più brutta. È per questo che abbiamo dovuto correggere il bug in SegWit. Certo, MtGox sosteneva di essere stata attaccata in questo modo perché qualcuno continuava a interferire con   
+   le loro firme di transazione e così hanno perso traccia di dove fossero finiti i loro fondi, ma in realtà, il motivo principale per correggere la malleabilità delle transazioni era supportare i canali di pagamento.
+ - Sì, includere le firme nell'hash che definisce infine il txid è stato un errore. Satoshi ne ha fatti molti di questi. Quindi stiamo solo ribadendo la lezione "Satoshi non era un essere infinito di saggezza infinita" qui. Satoshi ha solo  
+   un lasciapassare per quanto sia fantastico Bitcoin.
 
 
-Canali Spilman protetti da CLTV
+**Canali Spilman protetti da CLTV**
 
 Utilizzando CLTV per il ramo di backoff.
 
-Questa variazione è semplicemente rappresentata dai canali Spilman, ma con la transazione di backoff sostituita da un ramo di backoff nello SCRIPT a cui si paga. È diventato possibile solo dopo che OP_CHECKLOCKTIMEVERIFY (CLTV) è stato abilitato nel 2015.
+Questa variazione è semplicemente rappresentata dai canali Spilman, ma con la transazione di rimborso sostituita da un ramo di backoff nello SCRIPT a cui si paga. È diventato possibile solo dopo che OP_CHECKLOCKTIMEVERIFY (CLTV) è stato abilitato nel 2015.
 
 Come abbiamo visto nella discussione sui Canali Spilman, la malleabilità delle transazioni significa che qualsiasi transazione offchain pre-firmata può essere facilmente invalidata invertendo il segno della firma della transazione di finanziamento mentre quest'ultima non è ancora confermata.
 
@@ -135,9 +149,9 @@ Con CLTV, tuttavia, ora possiamo rendere espliciti i rami nello SCRIPT a cui la 
 
 Invece di pagare a un 2-di-2 per impostare la transazione di finanziamento, si paga a uno SCRIPT che è fondamentalmente “2-di-2, O questa firma singola dopo un tempo di blocco specificato”.
 
-Con questo, non c'è una transazione di backoff pre-firmata che si riferisce a un txid specifico. Invece, puoi creare la transazione di backoff in un secondo momento, utilizzando qualsiasi txid sotto cui la transazione di finanziamento viene confermata. Poiché la transazione di finanziamento è immutabile una volta confermata, non è più possibile cambiare il txid successivamente.
+Con questo, non c'è una transazione di rimborso pre-firmata che si riferisce a un txid specifico. Invece, puoi creare la transazione di rimborso in un secondo momento, utilizzando qualsiasi txid sotto cui la transazione di finanziamento viene confermata. Poiché la transazione di finanziamento è immutabile una volta confermata, non è più possibile cambiare il txid successivamente.
 
-RETI DI MICROPAGAMENTI DI TODD
+**RETI DI MICROPAGAMENTI DI TODD**
 
 Il vecchio modello hub-spoke (che non è come funziona oggi LN).
 
@@ -160,8 +174,9 @@ Canali bidirezionali a due partecipanti.
 
 Il meccanismo del canale Poon-Dryja ha due proprietà importanti:
 
-Bidirezionale.
-Nessun limite di tempo.
+- Bidirezionale.
+- Nessun limite di tempo.
+  
 Sia il canale originale di Satoshi che le due varianti di Spilman sono unidirezionali: c'è un pagatore e un beneficiario, e se il beneficiario desidera effettuare un rimborso o pagare per un servizio o prodotto diverso fornito dal pagatore, non può utilizzare lo stesso canale unidirezionale.
 
 Il meccanismo Poon-Dryja, tuttavia, consente ai canali di essere bidirezionali: non sei né un pagatore né un beneficiario nel canale, puoi ricevere o inviare in qualsiasi momento, purché tu e la controparte del canale siate online.
@@ -178,10 +193,10 @@ C'è una debolezza del Poon-Dryja che le persone tendono a trascurare (perché �
 
 Devi memorizzare tutte le chiavi di revoca di un canale. Questo implica che stai memorizzando 1 chiave di revoca per ogni aggiornamento del canale, quindi se esegui milioni di aggiornamenti nel corso della tua vita, dovresti memorizzare diversi megabyte di chiavi, per un solo canale. /u/RustyReddit ha risolto questo problema richiedendo che le chiavi di revoca siano generate da una chiave di revoca “Seed”, e ogni chiave è semplicemente l'applicazione di SHA256 su quella chiave, ripetutamente. Ad esempio, supponiamo che ti dica che la mia prima chiave di revoca è SHA256(SHA256(seed)). Puoi memorizzarlo in uno spazio O(1). Poi, per la successiva revoca, ti dico SHA256(seed). Da SHA256(key), puoi calcolare tu stesso SHA256(SHA256(seed)) (cioè la chiave di revoca precedente). Quindi puoi ricordare solo l'ultima chiave di revoca, e da lì saresti in grado di calcolare ogni chiave di revoca precedente. Quando inizi un canale, esegui SHA256 sulla tua seed per diversi milioni di volte, poi usi il risultato come prima chiave di revoca, rimuovendo uno strato di SHA256 per ogni chiave di revoca che devi generare. /u/RustyReddit non solo ha ideato questo, ma ha anche suggerito una struttura di archiviazione efficiente O(log n), la shachain, in modo da poter cercare rapidamente qualsiasi chiave di revoca nel passato in caso di violazione. Le persone non parlano più realmente di questo problema di archiviazione delle revoche O(n) perché è stato risolto molto bene da questo meccanismo.
 
-Un'altra cosa che voglio sottolineare è che, mentre il documento sulla Lightning Network e molte delle presentazioni precedenti si sono sviluppate dal vecchio modello hub-and-spoke di Peter Todd, la
+Un'altra cosa che voglio sottolineare è che, mentre il documento sulla Lightning Network e molte delle presentazioni precedenti si sono sviluppate dal vecchio modello hub-and-spoke di Peter Todd, la moderna Lightning Network arriva alla conclusione logica di rimuovere una netta separazione tra "hub" e "spoke". Qualsiasi nodo sulla Lightning Network può funzionare molto bene come hub per qualsiasi altro nodo. Pertanto, anche se potresti operare principalmente come "pagatore", "nodo di inoltro" o "ricevente", finisci comunque per essere almeno parzialmente un nodo di inoltro ("hub") sulla rete, almeno parte del tempo. Questo riduce notevolmente i problemi di privacy inerenti all'avere solo pochi nodi hub: i nodi di inoltro non possono ottenere dati significativamente utili dai pagamenti che passano attraverso di loro, perché la distanza tra il pagatore e il ricevente può essere così grande che è probabile che il pagatore finale e il ricevente finale possano essere chiunque sulla Lightning Network.
 
 
-lezioni apprese?
+**lezioni apprese?**
 
  - Possiamo decentralizzare se ci impegniamo abbastanza!
 
@@ -189,11 +204,11 @@ lezioni apprese?
 
  - Le persone intelligenti possono risolvere problemi. È un po' il motivo per cui sono intelligenti.
 
-FUTURO
+**FUTURO**
 
 Dopo la LN, ci sono anche i Canali di Micropagamento Duplex Decker-Wattenhofer (DMC). Questo post è già abbastanza lungo così com'è, LOL. Ma per ora, utilizza un nuovo “canale nSequence decrescente”, sfruttando le nuove semantiche di blocco temporale relativo di nSequence (non quella rotta originariamente da Satoshi). In realtà utilizza più di tali costrutti “nSequence decrescenti”, terminando in una coppia di canali Spilman, uno in entrambe le direzioni (quindi “duplex”). Forse ne parlerò un'altra volta.
 
-La realizzazione che le costruzioni di canali potrebbero effettivamente contenere più costruzioni di canali al loro interno (nel modo in cui Decker-Wattenhofer inserisce una coppia di canali Spilman all'interno di una serie di “canali nSequence decrescenti”) ha portato al pensiero successivo dietro le fabbriche di canali Burchert-Decker-Wattenhofer. Fondamentalmente, potresti ospitare più costrutti di canali a due partecipanti all'interno di un costrutto “canale” multipartitente più grande (cioè ospitare più canali all'interno di una fabbrica).
+La realizzazione che le costruzioni di canali potrebbero effettivamente contenere più costruzioni di canali al loro interno (nel modo in cui Decker-Wattenhofer inserisce una coppia di canali Spilman all'interno di una serie di “canali nSequence decrescenti”) ha portato al pensiero successivo dietro le fabbriche di canali Burchert-Decker-Wattenhofer. Fondamentalmente, potresti ospitare più costrutti di canali a due partecipanti all'interno di un costrutto “canale” multipartiutente più grande (cioè ospitare più canali all'interno di una fabbrica).
 
 Inoltre, abbiamo la costruzione Decker-Russell-Osuntokun o “eltoo”. Sosterrei che questo è “nSequence fatto bene”. Scriverò di più su questo in seguito, perché questo post è già abbastanza lungo.
 
