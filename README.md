@@ -20,12 +20,12 @@ In effetti, questo "canale nSequence" che descriverò è il motivo per cui abbia
 
 Quindi, quello che faresti sarebbe qualcosa del genere:
 
-1 Vai in un bar e prometti al barista di pagare entro la chiusura del bar. Poiché questo è l'universo di Bitcoin, il tempo è misurato in altezza di blocco, quindi l'orario di chiusura del bar è indicato come un'altezza di blocco futura.
+1. Vai in un bar e prometti al barista di pagare entro la chiusura del bar. Poiché questo è l'universo di Bitcoin, il tempo è misurato in altezza di blocco, quindi l'orario di chiusura del bar è indicato come un'altezza di blocco futura.
 
-2 Per il tuo primo drink, faresti una transazione pagando al barista per quel drink, pagando da alcune monete che hai. La transazione ha un nLockTime uguale all'orario di chiusura del bar e un nSequence iniziale di 0. Consegni la 
+2. Per il tuo primo drink, faresti una transazione pagando al barista per quel drink, pagando da alcune monete che hai. La transazione ha un nLockTime uguale all'orario di chiusura del bar e un nSequence iniziale di 0. Consegni la 
   transazione e il barista ti consegna il tuo drink.
 
-3 Per il drink successivo, rifaresti la stessa transazione, aggiungendo il pagamento per quel drink all'output della transazione che va al barista (in modo che quell'output continui a crescere, in base all'importo del pagamento), e avendo 
+3. Per il drink successivo, rifaresti la stessa transazione, aggiungendo il pagamento per quel drink all'output della transazione che va al barista (in modo che quell'output continui a crescere, in base all'importo del pagamento), e avendo 
   un nSequence che è uno più alto del precedente.
 
 4. Alla fine, devi smettere di bere. Si riduce a una delle due possibilità:
@@ -130,7 +130,7 @@ Quello che vedi ti shocca.
 
 “Non lo sapevi?” chiede il barista. “I componenti della firma sono solo numeri molto grandi. Il segno di uno dei componenti della firma può essere cambiato, da positivo a negativo, o da negativo a positivo, e la firma rimarrà valida. Chiunque può farlo, anche se non conosce la chiave privata. Ma poiché Bitcoin include le firme nella transazione quando genera il txid, questo piccolo cambiamento cambia anche il txid.” Lui o lei ride. “Dicono che lo sistemeranno separando le firme dal corpo della transazione. Dicono che questi tipi di malleabilità delle firme non influenzeranno più gli ID delle transazioni dopo aver fatto questo, ma scommetto che posso convincere il mio buon amico Jihan Wu a ritardare questo piano ‘SepSig’ per un bel po’. Un tipo amichevole, questo Jihan Wu, si scopre che tutto quello che dovevo fare era offrirgli 51 drink e lui era disposto a minare una transazione con i segni delle firme invertiti.” Il suo sorriso si allarga. “Temo che la tua transazione di "rimborso" non funzionerà più, poiché spende un txid che non esiste e non sarà mai confermato. Quindi ecco l'affare. Mi paghi il 99% dei fondi nella transazione di finanziamento, in cambio della mia firma sulla transazione che spende con il txid che vedi on-chain. Rifiuta, e perdi il 100% dei fondi e ogni altro HODLer, me compreso, beneficerà della riduzione dell'offerta di monete. Accetta, e ti terrai l'1%. Non perdo nulla se rifiuti, quindi non mi importerà se lo fai, ma considera la differenza tra ottenere nulla e ottenere l'1% dei tuoi fondi.” I suoi occhi brillano. “GENUFLETTI SUBITO.”
  
-LEZIONE APPRESA?
+**Lezione appresa**
 
  - La vendetta è una brutta bestia.
  - La malleabilità delle transazioni è una bestia ancora più brutta. È per questo che abbiamo dovuto correggere il bug in SegWit. Certo, MtGox sosteneva di essere stata attaccata in questo modo perché qualcuno continuava a interferire con   
