@@ -123,7 +123,7 @@ Una volta che la transazione di finanziamento viene confermata profondamente, il
 
 \- “Va bene,” dici. “Stavo per andarmene comunque;” Sorridi. “Recupererò i miei soldi con la transazione di "rimborso" e scrivendo di quanto sia scadente il tuo servizio su Reddit, così ricevi karma negativo!”
 
--\ “Non così in fretta,” dice il barista. La sua voce ti fa gelare le ossa. Sembra che il tuo sfruttamento del canale di pagamento nSequence di Satoshi sia ancora fresco nella sua mente. “Guarda il txid della transazione di finanziamento che è  stata confermata.”
+\- “Non così in fretta,” dice il barista. La sua voce ti fa gelare le ossa. Sembra che il tuo sfruttamento del canale di pagamento nSequence di Satoshi sia ancora fresco nella sua mente. “Guarda il txid della transazione di finanziamento che è  stata confermata.”
 
 “E che c'è di strano?” chiedi con nonchalance, mentre apri il tuo computer desktop e accedi a un esploratore blockchain affidabile.
 
