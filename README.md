@@ -1,5 +1,8 @@
-# Una-Breve-Storia-dei-Canali-di-Pagamento-da-Satoshi-alla-Lightning-Network---Alan-Manuel-K.-Gloria
-Traduzione in italiano dell'articolo Technical: A Brief History of Payment Channels: from Satoshi to Lightning Network
+# Storia dei canali di pagamento Lightining
+
+Traduzione in italiano dell'articolo - Technical: A Brief History of Payment Channels: from Satoshi to Lightning Network by Alan Manuel k.Gloria
+
+Sito dell'articolo: https://cryptowords.github.io/technical-a-brief-history-of-payment-channels
 
 
 **12 Luglio 2019**
