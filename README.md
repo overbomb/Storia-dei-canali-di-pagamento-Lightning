@@ -22,13 +22,17 @@ Quindi, quello che faresti sarebbe qualcosa del genere:
 
 1 Vai in un bar e prometti al barista di pagare entro la chiusura del bar. Poiché questo è l'universo di Bitcoin, il tempo è misurato in altezza di blocco, quindi l'orario di chiusura del bar è indicato come un'altezza di blocco futura.
 
-2 Per il tuo primo drink, faresti una transazione pagando al barista per quel drink, pagando da alcune monete che hai. La transazione ha un nLockTime uguale all'orario di chiusura del bar e un nSequence iniziale di 0. Consegni la transazione e il barista ti consegna il tuo drink.
+2 Per il tuo primo drink, faresti una transazione pagando al barista per quel drink, pagando da alcune monete che hai. La transazione ha un nLockTime uguale all'orario di chiusura del bar e un nSequence iniziale di 0. Consegni la 
+  transazione e il barista ti consegna il tuo drink.
 
-3 Per il drink successivo, rifaresti la stessa transazione, aggiungendo il pagamento per quel drink all'output della transazione che va al barista (in modo che quell'output continui a crescere, in base all'importo del pagamento), e avendo un nSequence che è uno più alto del precedente.
+3 Per il drink successivo, rifaresti la stessa transazione, aggiungendo il pagamento per quel drink all'output della transazione che va al barista (in modo che quell'output continui a crescere, in base all'importo del pagamento), e avendo 
+  un nSequence che è uno più alto del precedente.
 
-3 Alla fine, devi smettere di bere. Si riduce a una delle due possibilità:
-Bevi fino alla chiusura del bar. Adesso che è giunto il momento specificato da nLockTime nella transazione, il barista può trasmettere l'ultima transazione e dire ai buttafuori di cacciarti fuori dal bar.
-Oppure consideri saggiamente lo stato del tuo fegato. Quindi rifirmi l'ultima transazione con un nSequence "finale" di 0xFFFFFFFF, cioè il valore massimo che può avere. Questo consente al barista di ricevere immediatamente i suoi fondi (nLockTime viene ignorato se nSequence è 0xFFFFFFFF), quindi lui o lei dice ai buttafuori di lasciarti uscire dal bar.
+4. Alla fine, devi smettere di bere. Si riduce a una delle due possibilità:
+   
+ - Bevi fino alla chiusura del bar. Adesso che è giunto il momento specificato da nLockTime nella transazione, il barista può trasmettere l'ultima transazione e dire ai buttafuori di cacciarti fuori dal bar.
+ - Oppure consideri saggiamente lo stato del tuo fegato. Quindi rifirmi l'ultima transazione con un nSequence "finale" di 0xFFFFFFFF, cioè il valore massimo che può avere. Questo consente al barista di ricevere immediatamente i suoi fondi      (nLockTime viene ignorato se nSequence è 0xFFFFFFFF), quindi lui o lei dice ai buttafuori di lasciarti uscire dal bar.
+   
 Ovviamente, questo è un canale di pagamento. I pagamenti individuali (acquisti di alcol, quindi immagino che comprare caffè non sia rilevante per i canali di pagamento). La chiusura avviene creando una transazione "finale" che è la somma dei pagamenti individuali. Certo, non c'è instradamento, i canali sono unidirezionali ed hanno una durata massima, ma dai un po' di tregua a Satoshi, stava anche inventando Bitcoin in quel momento.
 
 Ora, se hai notato, ho chiamato questo tipo di canale di pagamento "rotto". Questo perché le regole del mempool non sono regole di consenso e non possono essere validate (nulla riguardo al mempool può essere validato on-chain: sospiro ogni volta che qualcuno propone "facciamo in modo che la dimensione del blocco dipenda dalla dimensione del mempool", lo stato del mempool non può essere validato dai dati on-chain). I nodi completi non possono vedere tutte le transazioni che hai firmato e poi convalidare che l'ultima con il massimo nSequence sia quella effettivamente utilizzata on-chain. Quindi puoi fare quanto segue:
